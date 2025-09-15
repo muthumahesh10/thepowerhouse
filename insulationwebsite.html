@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power House - Insulation Calculator & Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-bg {
+            background-image: url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .nav-link.active {
+            color: #0d9488; /* teal-600 */
+            border-bottom: 2px solid #0d9488;
+        }
+        .nav-link:hover {
+            color: #0d9488;
+        }
+        /* Hide all pages by default */
+        .page-content {
+            display: none;
+        }
+        /* Show the active page */
+        .page-content.active {
+            display: block;
+        }
+        #calculator-results {
+            transition: opacity 0.5s ease-in-out;
+        }
+        .form-field-hidden {
+            display: none;
+        }
+        .chart-container {
+            position: relative;
+            height: 40vh;
+            width: 100%;
+            max-width: 800px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="#" class="flex items-center space-x-2" id="logo-link">
+                <div class="p-1 bg-teal-50 rounded-full">
+                    <svg class="w-9 h-9 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                </div>
+                <h1 class="text-2xl font-bold text-teal-600">Power House</h1>
+            </a>
+            <nav class="hidden md:flex space-x-8">
+                <a class="nav-link active font-semibold pb-1" data-page="home">Home</a>
+                <a class="nav-link font-semibold pb-1" data-page="why-insulation">Why Insulation?</a>
+                <a class="nav-link font-semibold pb-1" data-page="services">Our Services</a>
+                <a class="nav-link font-semibold pb-1" data-page="get-quote">Get a Quote</a>
+                <a class="nav-link font-semibold pb-1" data-page="contact">Contact Us</a>
+            </nav>
+            <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none" aria-controls="mobile-menu" aria-expanded="false">
+                <span class="sr-only">Open main menu</span>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white px-6 pb-4">
+            <a class="block py-2 text-center nav-link-mobile" data-page="home">Home</a>
+            <a class="block py-2 text-center nav-link-mobile" data-page="why-insulation">Why Insulation?</a>
+            <a class="block py-2 text-center nav-link-mobile" data-page="services">Our Services</a>
+            <a class="block py-2 text-center nav-link-mobile" data-page="get-quote">Get a Quote</a>
+            <a class="block py-2 text-center nav-link-mobile" data-page="contact">Contact Us</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Page 1: Homepage -->
+        <section id="home" class="page-content active">
+            <!-- Hero Section -->
+            <div class="hero-bg text-white">
+                <div class="bg-black bg-opacity-50 min-h-[70vh] flex items-center">
+                    <div class="container mx-auto px-6 text-center">
+                        <h2 class="text-4xl md:text-6xl font-bold leading-tight mb-4">Lower Your Bills, Help the Planet.</h2>
+                        <p class="text-lg md:text-2xl mb-8">Professional Insulation Solutions for an Energy-Efficient and Comfortable India.</p>
+                        <button class="cta-button bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition duration-300" data-page="get-quote">
+                            Get a Free Quote
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Homepage Calculator Section -->
+            <div id="home-calculator" class="py-16 bg-gray-100">
+                <div class="container mx-auto px-6">
+                    <div class="text-center">
+                        <h2 class="text-4xl font-bold mb-2">Calculate Your Impact</h2>
+                        <div class="w-24 h-1 bg-teal-600 mx-auto mb-4"></div>
+                        <p class="max-w-2xl mx-auto text-lg mb-8">
+                            See how much you can save and how you can help the environment. Fill in the details for a personalized estimate.
+                        </p>
+                    </div>
+                    <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8 items-start">
+                        <!-- Calculator Form -->
+                        <div class="bg-white p-8 rounded-lg shadow-lg">
+                            <form id="calculator-form">
+                                <div class="space-y-5">
+                                    <h3 class="text-xl font-bold text-gray-700 border-b pb-2">1. Property Details</h3>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="calc-building-type" class="block text-gray-700 font-semibold mb-2 text-sm">Building Type</label>
+                                            <select id="calc-building-type" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white">
+                                                <option value="residential">Residential</option>
+                                                <option value="commercial">Commercial</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label for="calc-building-age" class="block text-gray-700 font-semibold mb-2 text-sm">Building Age</label>
+                                            <select id="calc-building-age" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white">
+                                                <option value="age-0-3">0 - 3 years</option>
+                                                <option value="age-3-5" selected>3 - 5 years</option>
+                                                <option value="age-5-10">5 - 10 years</option>
+                                                <option value="age-10-15">10 - 15 years</option>
+                                                <option value="age-15-20">15 - 20 years</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label for="calc-city" class="block text-gray-700 font-semibold mb-2 text-sm">Select Your Climate Zone</label>
+                                        <select id="calc-city" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white">
+                                            <option value="hot-dry">Hot & Dry (e.g., Delhi, Jaipur)</option>
+                                            <option value="warm-humid">Warm & Humid (e.g., Mumbai, Chennai)</option>
+                                            <option value="composite" selected>Moderate / Composite (e.g., Bengaluru, Pune)</option>
+                                            <option value="cold">Cold Climate (e.g., Shimla, Srinagar)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="calc-existing-insulation" class="block text-gray-700 font-semibold mb-2 text-sm">Existing Insulation?</label>
+                                        <select id="calc-existing-insulation" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white">
+                                            <option value="no">No</option>
+                                            <option value="yes">Yes</option>
+                                            <option value="unsure">Unsure</option>
+                                        </select>
+                                    </div>
+    
+                                    <h3 class="text-xl font-bold text-gray-700 border-b pb-2 pt-4">2. Area Details</h3>
+                                    <div>
+                                        <label for="calc-area-type" class="block text-gray-700 font-semibold mb-2 text-sm">Area to Insulate</label>
+                                        <select id="calc-area-type" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white">
+                                            <option value="roof">Roof / Terrace</option>
+                                            <option value="walls">External Walls</option>
+                                        </select>
+                                    </div>
+                                    <div id="calc-roof-type-field">
+                                        <label for="calc-roof-type" class="block text-gray-700 font-semibold mb-2 text-sm">Roof Type</label>
+                                        <select id="calc-roof-type" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white">
+                                            <option value="flat">Flat Concrete Terrace</option>
+                                            <option value="pitched">Pitched / Sloped Roof</option>
+                                        </select>
+                                    </div>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="calc-length" class="block text-gray-700 font-semibold mb-2 text-sm">Length (in feet)</label>
+                                            <input type="number" id="calc-length" value="40" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500" placeholder="e.g., 40" required>
+                                        </div>
+                                        <div>
+                                            <label for="calc-width" class="block text-gray-700 font-semibold mb-2 text-sm">Width (in feet)</label>
+                                            <input type="number" id="calc-width" value="30" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500" placeholder="e.g., 30" required>
+                                        </div>
+                                    </div>
+    
+                                    <h3 class="text-xl font-bold text-gray-700 border-b pb-2 pt-4">3. Current Costs</h3>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="calc-bill" class="block text-gray-700 font-semibold mb-2 text-sm h-10">Avg. Monthly Electric Bill</label>
+                                            <div class="relative">
+                                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">₹</span>
+                                                <input type="number" id="calc-bill" value="5000" class="w-full pl-7 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500" placeholder="e.g., 5000" required>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label for="calc-watts" class="block text-gray-700 font-semibold mb-2 text-sm h-10">Avg. Power (Watts) <span class="font-normal text-gray-500">(Optional)</span></label>
+                                            <div class="relative">
+                                                <input type="number" id="calc-watts" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500" placeholder="e.g., 1500">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300 mt-8">
+                                    Calculate My Impact
+                                </button>
+                            </form>
+                        </div>
+                        <!-- Calculator Results -->
+                        <div id="calculator-results" class="bg-gray-800 text-white p-8 rounded-lg shadow-lg opacity-0 md:sticky top-28">
+                            <h3 class="text-2xl font-bold mb-6 text-center border-b border-gray-600 pb-4">Your Estimated Impact</h3>
+                            <div class="space-y-4 text-lg">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-semibold text-teal-300">Est. Project Cost:</span>
+                                    <span id="result-cost" class="font-bold">₹ --,---</span>
+                                </div>
+                                <hr class="border-gray-600 my-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-semibold text-green-400">Est. Annual Savings:</span>
+                                    <span id="result-savings" class="font-bold">₹ --,---</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="font-semibold text-yellow-400">Est. Energy Saved:</span>
+                                    <span id="result-energy" class="font-bold">-- kWh / year</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="font-semibold text-blue-400">Est. Carbon Reduction:</span>
+                                    <span id="result-carbon" class="font-bold">-- kg CO₂ / year</span>
+                                </div>
+                                <div class="text-center text-sm text-gray-400 pt-2">
+                                    <span id="result-carbon-equivalent"></span>
+                                </div>
+                            </div>
+                            <div class="mt-6 pt-6 border-t border-gray-600 text-center">
+                                <h4 class="font-semibold text-lg mb-3">Ready for an Accurate Quote?</h4>
+                                <p class="text-sm text-gray-300 mb-4">The values above are estimates. Contact us for a precise quote tailored to your property.</p>
+                                <button class="cta-button w-full bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300" data-page="get-quote">
+                                    Get My Free Quote
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Data Section on Homepage -->
+            <div class="py-16 bg-white">
+                <div class="container mx-auto px-6">
+                    <div class="bg-white p-8 rounded-lg shadow-lg">
+                        <h3 class="text-2xl font-bold text-center mb-2">The Unavoidable Trend: Rising Electricity Tariffs</h3>
+                        <p class="text-center text-gray-600 mb-8">Average tariff rates (cost per kWh) are climbing. As energy becomes more expensive, saving it becomes more valuable.</p>
+                        <div class="chart-container">
+                            <canvas id="electricityChartHome"></canvas>
+                        </div>
+                        <div class="bg-gray-100 p-4 rounded-lg mt-6 text-sm text-gray-600">
+                            <p class="font-semibold mb-2">A Note on the Data:</p>
+                            <p>The chart above is illustrative and represents a nationwide average trend. Actual tariffs vary by state and provider. The data is based on an analysis of information from the following public sources:</p>
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><a href="https://cea.nic.in/reports-and-database/" target="_blank" rel="noopener noreferrer" class="text-teal-600 hover:underline">Central Electricity Authority (CEA) of India Reports</a></li>
+                                <li><a href="https://powermin.gov.in/en/content/power-sector-glance-all-india" target="_blank" rel="noopener noreferrer" class="text-teal-600 hover:underline">Ministry of Power - Power Sector at a Glance</a></li>
+                                <li><a href="https://www.indiastat.com/data/power" target="_blank" rel="noopener noreferrer" class="text-teal-600 hover:underline">IndiaStat Power Sector Reports</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- What We Do Section -->
+            <div class="py-16 bg-gray-100">
+                <div class="container mx-auto px-6 text-center">
+                    <h3 class="text-3xl font-bold mb-2">Solutions for Every Need</h3>
+                    <div class="w-24 h-1 bg-teal-600 mx-auto mb-12"></div>
+                    <div class="grid md:grid-cols-3 gap-12">
+                        <div class="p-6">
+                            <div class="flex justify-center mb-4">
+                                <svg class="w-16 h-16 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                            </div>
+                            <h4 class="text-xl font-semibold mb-2">Residential Insulation</h4>
+                            <p>Stay cool during scorching summers and warm during chilly winters. Perfect for roofs, walls, and terraces.</p>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-center mb-4">
+                                <svg class="w-16 h-16 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                            </div>
+                            <h4 class="text-xl font-semibold mb-2">Commercial Insulation</h4>
+                            <p>Create a productive work environment and drastically cut your company's operational costs.</p>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-center mb-4">
+                                <svg class="w-16 h-16 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5.336 20.305A1.5 1.5 0 014 18.868V5.132a1.5 1.5 0 011.336-1.437l12 2.5a1.5 1.5 0 011.164 1.437v9.736a1.5 1.5 0 01-1.164 1.437l-12 2.5z"></path><path d="M5.336 20.305l9.13-7.825a1.5 1.5 0 011.859 0l.01.01"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14 13.5V8.25"></path></svg>
+                            </div>
+                            <h4 class="text-xl font-semibold mb-2">Industrial Insulation</h4>
+                            <p>Ensure process efficiency and safety with high-temperature insulation for machinery, pipes, and ducts.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key Benefits Section -->
+            <div class="py-16 bg-white">
+                <div class="container mx-auto px-6 text-center">
+                    <h3 class="text-3xl font-bold mb-2">Experience the Difference</h3>
+                    <div class="w-24 h-1 bg-teal-600 mx-auto mb-12"></div>
+                    <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8 text-left">
+                        <p class="flex items-start"><svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> <strong>Save Money:</strong> Slash your AC and heating bills by up to 40%.</p>
+                        <p class="flex items-start"><svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> <strong>Ultimate Comfort:</strong> Maintain a pleasant temperature in your space all year round.</p>
+                        <p class="flex items-start"><svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> <strong>Peace & Quiet:</strong> Block out unwanted noise from traffic and neighbours.</p>
+                        <p class="flex items-start"><svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> <strong>Protect Your Property:</strong> Prevent leaks and dampness, especially during the monsoon.</p>
+                    </div>
+                    <button class="cta-button mt-12 bg-gray-700 hover:bg-gray-800 text-white font-bold py-3 px-8 rounded-lg text-lg transition duration-300" data-page="why-insulation">
+                        See All Benefits
+                    </button>
+                </div>
+            </div>
+
+            <!-- Why Choose Us? Section -->
+            <div class="py-16 bg-gray-100">
+                <div class="container mx-auto px-6 text-center">
+                    <h3 class="text-3xl font-bold mb-2">Your Trusted Insulation Partner</h3>
+                    <div class="w-24 h-1 bg-teal-600 mx-auto mb-12"></div>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <div class="bg-white p-6 rounded-lg shadow-sm">
+                            <h4 class="text-xl font-semibold mb-2">Expert Team</h4>
+                            <p>Our installers are trained, professional, and efficient.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-sm">
+                            <h4 class="text-xl font-semibold mb-2">Quality Materials</h4>
+                            <p>We use only the highest-grade, durable, and safe insulation products.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-sm">
+                            <h4 class="text-xl font-semibold mb-2">Fair Pricing</h4>
+                            <p>Get the best value for your investment with our transparent quotes.</p>
+                        </div>
+                         <div class="bg-white p-6 rounded-lg shadow-sm">
+                            <h4 class="text-xl font-semibold mb-2">Customer Satisfaction</h4>
+                            <p>We are committed to ensuring you are 100% happy with our work.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Page 2: Why Insulation? -->
+        <section id="why-insulation" class="page-content py-16">
+            <div class="container mx-auto px-6">
+                
+                <!-- New Data Section -->
+                <div class="bg-white p-8 rounded-lg shadow-lg mb-16">
+                    <h3 class="text-2xl font-bold text-center mb-2">The Unavoidable Trend: Rising Electricity Tariffs</h3>
+                    <p class="text-center text-gray-600 mb-8">Average tariff rates (cost per kWh) are climbing. As energy becomes more expensive, saving it becomes more valuable.</p>
+                    <div class="chart-container">
+                        <canvas id="electricityChart"></canvas>
+                    </div>
+                    <div class="bg-gray-100 p-4 rounded-lg mt-6 text-sm text-gray-600">
+                        <p class="font-semibold mb-2">A Note on the Data:</p>
+                        <p>The chart above is illustrative and represents a nationwide average trend. Actual tariffs vary by state and provider. The data is based on an analysis of information from the following public sources:</p>
+                        <ul class="list-disc list-inside mt-2 space-y-1">
+                            <li><a href="https://cea.nic.in/reports-and-database/" target="_blank" rel="noopener noreferrer" class="text-teal-600 hover:underline">Central Electricity Authority (CEA) of India Reports</a></li>
+                            <li><a href="https://powermin.gov.in/en/content/power-sector-glance-all-india" target="_blank" rel="noopener noreferrer" class="text-teal-600 hover:underline">Ministry of Power - Power Sector at a Glance</a></li>
+                            <li><a href="https://www.indiastat.com/data/power" target="_blank" rel="noopener noreferrer" class="text-teal-600 hover:underline">IndiaStat Power Sector Reports</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- New Carbon Emissions Section -->
+                <div class="bg-white p-8 rounded-lg shadow-lg mb-16">
+                    <h3 class="text-2xl font-bold text-center mb-2">More Than Savings: Your Role in a Greener Future</h3>
+                    <p class="text-center text-gray-600 mb-8 max-w-3xl mx-auto">Globally, buildings are responsible for nearly 40% of energy-related carbon emissions. In a growing nation like India, making our homes and offices energy-efficient is not just a choice—it's a necessity for a sustainable future.</p>
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
+                        <div class="chart-container !h-[35vh] md:!h-[40vh]">
+                            <canvas id="carbonEmissionsChart"></canvas>
+                        </div>
+                        <div class="text-gray-700">
+                             <h4 class="font-bold text-lg mb-2">How Insulation Makes a Difference</h4>
+                            <p class="mb-4">The chart shows that energy use in buildings is a massive contributor to CO₂ emissions. A significant portion of this energy is wasted on inefficient heating and cooling in poorly insulated properties.</p>
+                            <p>By installing professional insulation, you directly combat this waste. You drastically reduce the amount of energy your property needs to maintain a comfortable temperature. This single action lowers your carbon footprint, contributing to cleaner air and helping India meet its climate goals.</p>
+                        </div>
+                    </div>
+                    <div class="bg-gray-100 p-4 rounded-lg mt-6 text-sm text-gray-600">
+                        <p class="font-semibold mb-2">A Note on the Data:</p>
+                        <p>The chart provides a simplified breakdown of CO₂ emissions by sector in India to illustrate the impact of buildings. The data is synthesized from reports by the following international and national agencies:</p>
+                        <ul class="list-disc list-inside mt-2 space-y-1">
+                            <li><a href="https://www.iea.org/countries/india" target="_blank" rel="noopener noreferrer" class="text-teal-600 hover:underline">International Energy Agency (IEA) - India Profile</a></li>
+                            <li><a href="https://www.unep.org/global-alliance-buildings-and-construction" target="_blank" rel="noopener noreferrer" class="text-teal-600 hover:underline">UN Environment Programme - Buildings and Construction</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="text-center mb-12">
+                     <h2 class="text-4xl font-bold mb-2">Invest Once, Benefit for a Lifetime</h2>
+                     <div class="w-24 h-1 bg-teal-600 mx-auto mb-8"></div>
+                    <p class="max-w-3xl mx-auto text-lg">
+                        Beyond the numbers, the true value of insulation lies in the lasting comfort, peace, and security it brings to your property.
+                    </p>
+                </div>
+                
+                <!-- Benefits Details -->
+                <div class="space-y-16">
+                    <div class="flex flex-col md:flex-row items-center gap-12">
+                        <img src="https://images.unsplash.com/photo-1620714223084-86c9df2a889a?q=80&w=1974&auto=format&fit=crop" alt="Smiling person with a low electricity bill" class="w-full md:w-1/2 rounded-lg shadow-lg object-cover h-80" onerror="this.onerror=null;this.src='https://placehold.co/500x350/a7f3d0/166534?text=Reduced+Energy+Bill';">
+                        <div class="md:w-1/2">
+                            <h3 class="text-2xl font-bold mb-4">1. Drastically Reduce Your Energy Bills</h3>
+                            <p>The number one reason people choose insulation is savings. Insulation resists the flow of heat, meaning your air conditioner doesn't have to work as hard to keep your home cool in the summer. This directly translates to lower power consumption and significant savings on your monthly electricity bills.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row-reverse items-center gap-12">
+                        <img src="https://images.unsplash.com/photo-1578632201206-88c6a5a3a793?q=80&w=2070&auto=format&fit=crop" alt="Worker installing spray foam insulation" class="w-full md:w-1/2 rounded-lg shadow-lg object-cover h-80" onerror="this.onerror=null;this.src='https://placehold.co/500x350/bae6fd/0c4a6e?text=Thermal+Comfort';">
+                        <div class="md:w-1/2">
+                            <h3 class="text-2xl font-bold mb-4">2. Enjoy Year-Round Comfort</h3>
+                            <p>Insulation keeps your home's indoor temperature stable. It blocks the intense heat from penetrating your roof and walls during summer and stops the warmth from escaping during winter. Enjoy a comfortable living space, no matter the season.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row items-center gap-12">
+                        <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=2070&auto=format&fit=crop" alt="A quiet and peaceful home office" class="w-full md:w-1/2 rounded-lg shadow-lg object-cover h-80" onerror="this.onerror=null;this.src='https://placehold.co/500x350/fde68a/854d0e?text=Sound+Insulation';">
+                        <div class="md:w-1/2">
+                            <h3 class="text-2xl font-bold mb-4">3. Create a Peaceful & Quiet Environment</h3>
+                            <p>Tired of the noise from traffic, construction, or loud neighbours? Acoustic insulation absorbs sound waves, creating a much quieter and more serene indoor environment for your family or a more focused workspace for your employees.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col md:flex-row-reverse items-center gap-12">
+                        <img src="https://images.unsplash.com/photo-1572949645841-094f3a9c4c94?q=80&w=1974&auto=format&fit=crop" alt="Professional worker applying insulation on a roof" class="w-full md:w-1/2 rounded-lg shadow-lg object-cover h-80" onerror="this.onerror=null;this.src='https://placehold.co/500x350/e9d5ff/581c87?text=Waterproof+Layer';">
+                        <div class="md:w-1/2">
+                            <h3 class="text-2xl font-bold mb-4">4. Protect Your Building from Moisture and Leaks</h3>
+                            <p>Properly installed insulation, especially on the roof and terrace, acts as a barrier against water seepage during heavy monsoons. This prevents the growth of harmful mold and mildew, protecting your family's health and the structural integrity of your building.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-8 pt-8">
+                         <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="text-xl font-bold mb-2">5. Increase Your Property's Value</h3>
+                            <p>An energy-efficient home is a modern, desirable home. Installing quality insulation is a smart investment that increases the resale value of your property.</p>
+                        </div>
+                         <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="text-xl font-bold mb-2">6. An Eco-Friendly Choice</h3>
+                            <p>By reducing your energy consumption, you also reduce your carbon footprint. Insulation is a green choice that helps in the fight against climate change.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-16">
+                    <button class="cta-button bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition duration-300" data-page="get-quote">
+                        Get Your Free Quote Now
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Page 3: Our Services -->
+        <section id="services" class="page-content py-16 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center">
+                    <h2 class="text-4xl font-bold mb-2">Tailored Insulation for Your Specific Needs</h2>
+                    <div class="w-24 h-1 bg-teal-600 mx-auto mb-12"></div>
+                </div>
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-6 border-l-4 border-teal-600 pl-4">Residential Insulation</h3>
+                        <div class="space-y-4">
+                            <div class="p-6 bg-gray-50 rounded-lg">
+                                <h4 class="font-semibold text-lg">Roof & Terrace Insulation</h4>
+                                <p>The most critical area for heat gain. Our solutions reflect sunlight and block heat from entering your home from the top.</p>
+                            </div>
+                            <div class="p-6 bg-gray-50 rounded-lg">
+                                <h4 class="font-semibold text-lg">Wall Insulation</h4>
+                                <p>We insulate internal and external walls to create a complete thermal envelope.</p>
+                            </div>
+                            <div class="p-6 bg-gray-50 rounded-lg">
+                                <h4 class="font-semibold text-lg">Acoustic Insulation</h4>
+                                <p>Perfect for home theatres, bedrooms, and study rooms to create soundproof spaces.</p>
+                            </div>
+                        </div>
+                    </div>
+                     <div>
+                        <h3 class="text-2xl font-bold mb-6 border-l-4 border-teal-600 pl-4">Commercial & Industrial Insulation</h3>
+                        <div class="space-y-4">
+                            <div class="p-6 bg-gray-50 rounded-lg">
+                                <h4 class="font-semibold text-lg">Office & Retail Spaces</h4>
+                                <p>Reduce HVAC costs and create a comfortable environment for employees and customers.</p>
+                            </div>
+                            <div class="p-6 bg-gray-50 rounded-lg">
+                                <h4 class="font-semibold text-lg">Cold Storage & Warehouses</h4>
+                                <p>Maintain specific temperatures efficiently for storing goods.</p>
+                            </div>
+                            <div class="p-6 bg-gray-50 rounded-lg">
+                                <h4 class="font-semibold text-lg">Industrial Pipe & Duct Insulation</h4>
+                                <p>Conserve energy, control temperatures, and protect personnel in industrial settings.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-16">
+                    <button class="cta-button bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition duration-300" data-page="get-quote">
+                        Discuss Your Project
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Page 4: Get a Quote -->
+        <section id="get-quote" class="page-content py-16">
+            <div class="container mx-auto px-6">
+                <div class="text-center">
+                    <h2 class="text-4xl font-bold mb-2">Tell Us About Your Project</h2>
+                    <div class="w-24 h-1 bg-teal-600 mx-auto mb-4"></div>
+                    <p class="max-w-2xl mx-auto text-lg mb-8">
+                        Fill out the form below for a free, no-obligation quote and consultation from our experts. We will contact you within 24 hours.
+                    </p>
+                </div>
+                <div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+                    <form id="quote-form" action="https://formspree.io/f/xkgvajlq" method="POST">
+                        <div class="grid md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label for="fullName" class="block text-gray-700 font-semibold mb-2">Full Name <span class="text-red-500">*</span></label>
+                                <input type="text" id="fullName" name="fullName" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500" required>
+                            </div>
+                            <div>
+                                <label for="phone" class="block text-gray-700 font-semibold mb-2">Phone Number <span class="text-red-500">*</span></label>
+                                <input type="tel" id="phone" name="phone" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500" required>
+                            </div>
+                            <div>
+                                <label for="email" class="block text-gray-700 font-semibold mb-2">Email Address <span class="text-red-500">*</span></label>
+                                <input type="email" id="email" name="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500" required>
+                            </div>
+                            <div>
+                                <label for="city" class="block text-gray-700 font-semibold mb-2">City / Location <span class="text-red-500">*</span></label>
+                                <input type="text" id="city" name="city" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500" required>
+                            </div>
+                        </div>
+                        <div class="mb-6">
+                            <label for="propertyType" class="block text-gray-700 font-semibold mb-2">Type of Property</label>
+                            <select id="propertyType" name="propertyType" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white">
+                                <option>Residential Home</option>
+                                <option>Apartment</option>
+                                <option>Office</option>
+                                <option>Factory</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-6">
+                            <label class="block text-gray-700 font-semibold mb-2">What service are you interested in?</label>
+                            <div class="grid sm:grid-cols-2 gap-4">
+                                <label class="flex items-center"><input type="checkbox" name="service" value="Roof/Terrace" class="h-4 w-4 text-teal-600 border-gray-300 rounded mr-2 focus:ring-teal-500"> Roof/Terrace Insulation</label>
+                                <label class="flex items-center"><input type="checkbox" name="service" value="Wall" class="h-4 w-4 text-teal-600 border-gray-300 rounded mr-2 focus:ring-teal-500"> Wall Insulation</label>
+                                <label class="flex items-center"><input type="checkbox" name="service" value="Acoustic" class="h-4 w-4 text-teal-600 border-gray-300 rounded mr-2 focus:ring-teal-500"> Noise Reduction/Acoustic</label>
+                                <label class="flex items-center"><input type="checkbox" name="service" value="Industrial" class="h-4 w-4 text-teal-600 border-gray-300 rounded mr-2 focus:ring-teal-500"> Industrial Insulation</label>
+                                <label class="flex items-center"><input type="checkbox" name="service" value="Not Sure" class="h-4 w-4 text-teal-600 border-gray-300 rounded mr-2 focus:ring-teal-500"> Not Sure</label>
+                            </div>
+                        </div>
+                        <div class="mb-6">
+                            <label for="message" class="block text-gray-700 font-semibold mb-2">Briefly describe your requirement</label>
+                            <textarea id="message" name="message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300">
+                            Submit My Request
+                        </button>
+                    </form>
+                    <div id="form-message" class="mt-4 text-center"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Page 5: Contact Us -->
+        <section id="contact" class="page-content py-16 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center">
+                    <h2 class="text-4xl font-bold mb-2">We'd Love to Hear From You</h2>
+                    <div class="w-24 h-1 bg-teal-600 mx-auto mb-4"></div>
+                    <p class="max-w-2xl mx-auto text-lg mb-12">
+                        For any questions, inquiries, or to speak with our team directly, please use the information below.
+                    </p>
+                </div>
+                <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8 text-center md:text-left">
+                     <div class="bg-gray-50 p-8 rounded-lg shadow-sm">
+                        <h3 class="text-xl font-bold mb-4">Contact Information</h3>
+                        <p class="mb-2"><strong>General Inquiries:</strong> <a href="mailto:muthumaheshjothiramalingam@gmail.com" class="text-teal-600 hover:underline">muthumaheshjothiramalingam@gmail.com</a></p>
+                        <p class="mb-2"><strong>Phone:</strong> <a href="tel:+919976746427" class="text-teal-600 hover:underline">+91 99767 46427</a></p>
+                        <p class="mb-2"><strong>Technical Contact:</strong> <a href="https://www.linkedin.com/in/muthumahesh/" target="_blank" rel="noopener noreferrer" class="text-teal-600 hover:underline">LinkedIn Profile</a></p>
+                        <p><strong>Address:</strong> [Your Business Address], [City], India</p>
+                    </div>
+                    <div class="bg-gray-50 p-8 rounded-lg shadow-sm">
+                        <h3 class="text-xl font-bold mb-4">Business Hours</h3>
+                        <p class="mb-2"><strong>Monday - Saturday:</strong> 9:00 AM - 6:00 PM</p>
+                        <p><strong>Sunday:</strong> Closed</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white pt-12 pb-8">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="md:col-span-1">
+                    <h3 class="text-xl font-bold mb-4">Power House</h3>
+                    <p class="text-gray-400">Your trusted partner for thermal and acoustic insulation solutions across India.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="nav-link text-gray-300 hover:text-white" data-page="home">Home</a></li>
+                        <li><a href="#" class="nav-link text-gray-300 hover:text-white" data-page="why-insulation">Why Insulation?</a></li>
+                        <li><a href="#" class="nav-link text-gray-300 hover:text-white" data-page="services">Our Services</a></li>
+                        <li><a href="#" class="nav-link text-gray-300 hover:text-white" data-page="get-quote">Get a Quote</a></li>
+                        <li><a href="#" class="nav-link text-gray-300 hover:text-white" data-page="contact">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Contact</h3>
+                     <p class="text-gray-300 mb-2">Email: <a href="mailto:muthumaheshjothiramalingam@gmail.com" class="hover:text-white hover:underline">muthumaheshjothiramalingam@gmail.com</a></p>
+                     <p class="text-gray-300 mb-2">Phone: <a href="tel:+919976746427" class="hover:text-white hover:underline">+91 99767 46427</a></p>
+                     <p class="text-gray-300">LinkedIn: <a href="https://www.linkedin.com/in/muthumahesh/"  target="_blank" rel="noopener noreferrer" class="hover:text-white hover:underline">Technical Contact</a></p>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400">
+                <p>&copy; 2025 Power House. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Navigation Logic ---
+            const allNavLinks = document.querySelectorAll('.nav-link, .nav-link-mobile, .cta-button'); 
+            const pages = document.querySelectorAll('.page-content');
+            const logoLink = document.getElementById('logo-link');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            let electricityChartInstance = null;
+            let homeChartInstance = null;
+            let carbonChartInstance = null;
+
+            function switchPage(pageId) {
+                 if (!pageId) return; // Do nothing if a link without a data-page is clicked
+                
+                pages.forEach(page => page.classList.remove('active'));
+
+                const targetPage = document.getElementById(pageId);
+                if (targetPage) {
+                    targetPage.classList.add('active');
+                }
+
+                document.querySelectorAll('header .nav-link').forEach(link => {
+                    link.classList.remove('active');
+                    if (link.dataset.page === pageId) {
+                        link.classList.add('active');
+                    }
+                });
+                
+                mobileMenu.classList.add('hidden');
+                mobileMenuButton.setAttribute('aria-expanded', 'false');
+
+                window.scrollTo(0, 0);
+                
+                if (pageId === 'why-insulation') {
+                    renderElectricityChart();
+                    renderCarbonChart();
+                }
+                if (pageId === 'home') {
+                    renderHomepageChart();
+                }
+            }
+
+            // All Navigation Links
+            allNavLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    switchPage(link.dataset.page);
+                });
+            });
+
+            // Logo Link Navigation
+            logoLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                switchPage('home');
+            });
+
+            // --- Mobile Menu Toggle ---
+            mobileMenuButton.addEventListener('click', () => {
+                const isExpanded = mobileMenu.classList.toggle('hidden');
+                mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
+            });
+            
+            // --- Quote Form Submission ---
+            const quoteForm = document.getElementById('quote-form');
+            if (quoteForm) {
+                const formMessage = document.getElementById('form-message');
+                quoteForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const formData = new FormData(quoteForm);
+                    const formAction = quoteForm.action;
+                    const submitButton = quoteForm.querySelector('button[type="submit"]');
+                    submitButton.disabled = true;
+                    submitButton.textContent = 'Submitting...';
+                    fetch(formAction, {
+                        method: 'POST',
+                        body: formData,
+                        headers: { 'Accept': 'application/json' }
+                    }).then(response => {
+                        if (response.ok) {
+                            formMessage.textContent = 'Thank you for your request! We will contact you shortly.';
+                            formMessage.className = 'mt-4 text-center text-green-600 font-semibold';
+                            quoteForm.reset();
+                        } else {
+                            response.json().then(data => {
+                                if (Object.hasOwn(data, 'errors')) {
+                                    formMessage.textContent = data["errors"].map(error => error["message"]).join(", ");
+                                } else {
+                                    formMessage.textContent = 'Oops! There was a problem submitting your form.';
+                                }
+                                formMessage.className = 'mt-4 text-center text-red-600 font-semibold';
+                            })
+                        }
+                    }).catch(error => {
+                        formMessage.textContent = 'Oops! There was a problem submitting your form.';
+                        formMessage.className = 'mt-4 text-center text-red-600 font-semibold';
+                    }).finally(() => {
+                        submitButton.disabled = false;
+                        submitButton.textContent = 'Submit My Request';
+                    });
+                });
+            }
+
+            // --- Insulation Calculator Logic ---
+            const calculatorForm = document.getElementById('calculator-form');
+            const calcAreaType = document.getElementById('calc-area-type');
+            const calcRoofTypeField = document.getElementById('calc-roof-type-field');
+            const resultsDiv = document.getElementById('calculator-results');
+
+            function calculateAndShowResults() {
+                const buildingType = document.getElementById('calc-building-type').value;
+                const buildingAge = document.getElementById('calc-building-age').value;
+                const cityZone = document.getElementById('calc-city').value;
+                const existingInsulation = document.getElementById('calc-existing-insulation').value;
+                const areaType = document.getElementById('calc-area-type').value;
+                const roofType = document.getElementById('calc-roof-type').value;
+                const length = parseFloat(document.getElementById('calc-length').value);
+                const width = parseFloat(document.getElementById('calc-width').value);
+                const bill = parseFloat(document.getElementById('calc-bill').value);
+                const watts = parseFloat(document.getElementById('calc-watts').value);
+
+                if (isNaN(length) || isNaN(width) || isNaN(bill) || length <= 0 || width <= 0) {
+                    return;
+                }
+
+                const totalArea = length * width;
+                
+                const INDIA_KWH_TO_CO2_KG = 0.82; 
+                const AVG_KWH_PRICE_INDIA = 7.5; 
+                let costPerSqFt = 50; 
+                let savingsPercentage = 0.25; 
+
+                if (areaType === 'roof') {
+                    if (cityZone === 'hot-dry' || cityZone === 'warm-humid') { costPerSqFt = 75; savingsPercentage = 0.35; } 
+                    else if (cityZone === 'composite') { costPerSqFt = 70; savingsPercentage = 0.30; } 
+                    else if (cityZone === 'cold') { costPerSqFt = 80; savingsPercentage = 0.40; }
+                } else { // Walls
+                    if (cityZone === 'hot-dry' || cityZone === 'warm-humid') { costPerSqFt = 55; savingsPercentage = 0.20; } 
+                    else if (cityZone === 'composite') { costPerSqFt = 50; savingsPercentage = 0.18; } 
+                    else if (cityZone === 'cold') { costPerSqFt = 60; savingsPercentage = 0.25; }
+                }
+
+                if (buildingType === 'commercial') { costPerSqFt *= 1.1; savingsPercentage *= 1.05; }
+                if (areaType === 'roof' && roofType === 'pitched') { costPerSqFt *= 1.15; }
+                if (existingInsulation === 'yes') { savingsPercentage *= 0.4; costPerSqFt *= 0.8; }
+                if (existingInsulation === 'unsure') { savingsPercentage *= 0.7; }
+                
+                const ageFactorMap = {
+                    'age-0-3': 1.0, 'age-3-5': 1.05, 'age-5-10': 1.1,
+                    'age-10-15': 1.15, 'age-15-20': 1.2
+                };
+                const ageFactor = ageFactorMap[buildingAge] || 1.0;
+                savingsPercentage *= ageFactor;
+
+                const estimatedCost = totalArea * costPerSqFt;
+                const annualBill = bill * 12;
+                const annualSavings = annualBill * savingsPercentage;
+
+                let energySavingsKwh;
+                if (!isNaN(watts) && watts > 0) {
+                    const dailyHoursOfUse = 6; 
+                    const monthlyEnergyConsumptionKwh = (watts * dailyHoursOfUse * 30) / 1000;
+                    energySavingsKwh = monthlyEnergyConsumptionKwh * 12 * savingsPercentage;
+                } else {
+                    energySavingsKwh = annualSavings / AVG_KWH_PRICE_INDIA;
+                }
+
+                const carbonReductionKg = energySavingsKwh * INDIA_KWH_TO_CO2_KG;
+                const treesEquivalent = carbonReductionKg / 22; 
+                
+                const inrFormatter = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 });
+
+                document.getElementById('result-cost').textContent = inrFormatter.format(estimatedCost);
+                document.getElementById('result-savings').textContent = inrFormatter.format(annualSavings);
+                document.getElementById('result-energy').textContent = `${energySavingsKwh.toFixed(0)} kWh / year`;
+                document.getElementById('result-carbon').textContent = `${carbonReductionKg.toFixed(0)} kg CO₂ / year`;
+                document.getElementById('result-carbon-equivalent').innerHTML = `That's like planting 🌳 <strong>${treesEquivalent.toFixed(0)} mature trees</strong> every year!`;
+                
+                resultsDiv.classList.remove('opacity-0');
+            }
+
+            if (calculatorForm && calcAreaType && calcRoofTypeField) {
+                calcAreaType.addEventListener('change', function() {
+                    if (this.value === 'roof') { calcRoofTypeField.style.display = 'block'; } 
+                    else { calcRoofTypeField.style.display = 'none'; }
+                });
+                calculatorForm.addEventListener('submit', function(e) { e.preventDefault(); calculateAndShowResults(); });
+                calculateAndShowResults();
+            }
+
+            // --- Chart.js Logic ---
+            function renderHomepageChart() {
+                const ctxHome = document.getElementById('electricityChartHome');
+                if (!ctxHome) return;
+                if (homeChartInstance) {
+                    homeChartInstance.destroy();
+                }
+
+                 const chartData = {
+                    labels: ['2021', '2023', '2025 (Est.)'],
+                    datasets: [
+                        {
+                            label: 'Domestic Tariff (Avg. ₹/kWh)',
+                            data: [5.80, 6.40, 7.10],
+                            backgroundColor: 'rgba(13, 148, 136, 0.7)', // teal-600
+                            borderColor: 'rgba(13, 148, 136, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Commercial Tariff (Avg. ₹/kWh)',
+                            data: [8.50, 9.40, 10.50],
+                            backgroundColor: 'rgba(74, 222, 128, 0.7)', // green-400
+                            borderColor: 'rgba(74, 222, 128, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                };
+
+                homeChartInstance = new Chart(ctxHome, {
+                    type: 'bar',
+                    data: chartData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Average Tariff (₹ / kWh)'
+                                }
+                            }
+                        },
+                        plugins: {
+                            title: {
+                                display: false,
+                            },
+                             tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed.y !== null) {
+                                            label += new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(context.parsed.y);
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            function renderElectricityChart() {
+                const ctx = document.getElementById('electricityChart');
+                if (!ctx) return;
+                if (electricityChartInstance) {
+                    electricityChartInstance.destroy();
+                }
+                
+                const chartData = {
+                    labels: ['2021', '2023', '2025 (Est.)'],
+                    datasets: [
+                        {
+                            label: 'Domestic Tariff (Avg. ₹/kWh)',
+                            data: [5.80, 6.40, 7.10],
+                            backgroundColor: 'rgba(13, 148, 136, 0.7)', // teal-600
+                            borderColor: 'rgba(13, 148, 136, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Commercial Tariff (Avg. ₹/kWh)',
+                            data: [8.50, 9.40, 10.50],
+                            backgroundColor: 'rgba(74, 222, 128, 0.7)', // green-400
+                            borderColor: 'rgba(74, 222, 128, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                };
+
+                electricityChartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: chartData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Average Tariff (₹ / kWh)'
+                                }
+                            }
+                        },
+                        plugins: {
+                            title: {
+                                display: false,
+                            },
+                             tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed.y !== null) {
+                                            label += new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(context.parsed.y);
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            function renderCarbonChart() {
+                const ctx = document.getElementById('carbonEmissionsChart');
+                if (!ctx) return;
+                if (carbonChartInstance) {
+                    carbonChartInstance.destroy();
+                }
+                
+                const chartData = {
+                    labels: ['Energy Use in Buildings', 'Industry', 'Transport', 'Other Sectors'],
+                    datasets: [{
+                        label: 'CO₂ Emissions by Sector in India',
+                        data: [28, 32, 24, 16],
+                        backgroundColor: [
+                            'rgba(13, 148, 136, 0.8)', // teal-600
+                            'rgba(5, 150, 105, 0.7)', // emerald-600
+                            'rgba(245, 158, 11, 0.7)',  // amber-500
+                            'rgba(107, 114, 128, 0.6)' // gray-500
+                        ],
+                        borderColor: '#ffffff',
+                        borderWidth: 2,
+                    }]
+                };
+
+                carbonChartInstance = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: chartData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'India CO₂ Emissions by Sector (Approx.)',
+                                font: { size: 16 }
+                            },
+                            legend: {
+                                position: 'bottom',
+                            },
+                             tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed !== null) {
+                                            label += context.parsed + '%';
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Initial render for homepage chart
+            renderHomepageChart();
+        });
+    </script>
+
+</body>
+</html>
